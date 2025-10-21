@@ -1,6 +1,7 @@
 from httpx import Client
 from ..interfaces import RepositoryServiceInterface, SecretsManagerInterface
 from ..utils.token_manager import TokenManager
+from ..models.requests import LLMResponseStructure
 
 
 class GithubService(RepositoryServiceInterface):
@@ -35,4 +36,26 @@ class GithubService(RepositoryServiceInterface):
         response = self.client.get(pull_request_url, headers=headers)
         response.raise_for_status()
         return response.text
-    
+
+    def post_review_comments(self, pull_request_url: str, installation_id: str, reviews: LLMResponseStructure) -> None:
+        """Posts review comments to a given pull request on GitHub."""
+        jwt_token = self.token_manager.get_jwt_token()
+        access_token = self.token_manager.get_installation_access_token(
+            jwt_token, installation_id
+        )
+        comments_url = f"{pull_request_url}/comments"
+        headers = {
+            "Authorization": f"token {access_token}",
+            "Accept": "application/vnd.github.v3+json",
+        }
+        comments = ""
+        for review in reviews.items:
+            comments += f"Suggested Change (Lines {review.line_number_start} to {review.line_number_end}):\n"
+            comments += f"```diff\n{review.suggestion_diff}\n```\n\n"
+        
+        payload = {
+            "body": comments,
+            "event": "COMMENT"
+        }
+        response = self.client.post(comments_url, headers=headers, json=payload)
+        response.raise_for_status()
