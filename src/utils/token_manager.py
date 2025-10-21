@@ -2,19 +2,20 @@ import jwt
 import requests
 from datetime import datetime, timedelta, timezone
 from ..config import GITHUB_PRIVATE_KEY_PATH, CLIENT_ID, JWT_ALGORITHM, ENV
-from .dependencies import get_secrets_manager
+from ..interfaces import SecretsManagerInterface
 
 
 class TokenManager:
+    def __init__(self, secrets_manager: SecretsManagerInterface) -> None:
+        self.secrets_manager = secrets_manager
 
-    @staticmethod
-    def get_jwt_token() -> str:
+    def get_jwt_token(self) -> str:
         private_key = None
         if ENV.lower() == "local":
             with open(GITHUB_PRIVATE_KEY_PATH, "r") as key_file:
                 private_key = key_file.read()
         else:
-            return get_secrets_manager().get_secret(GITHUB_PRIVATE_KEY_PATH)
+            return self.secrets_manager.get_secret(GITHUB_PRIVATE_KEY_PATH)
 
         payload = {
             "iat": int(datetime.now(timezone.utc).timestamp()),
@@ -28,8 +29,7 @@ class TokenManager:
         jwt_token = jwt.encode(payload, private_key, algorithm=JWT_ALGORITHM)
         return jwt_token
 
-    @staticmethod
-    def get_installation_access_token(jwt_token: str, installation_id: int) -> str:
+    def get_installation_access_token(self, jwt_token: str, installation_id: int) -> str:
         url = (
             f"https://api.github.com/app/installations/{installation_id}/access_tokens"
         )

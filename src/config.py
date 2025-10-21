@@ -7,8 +7,14 @@ load_dotenv(
     dotenv_path=os.path.join(os.path.dirname(__file__), "resources", f".env.{ENV}")
 )
 
-LLM_API_KEY_PATH = os.getenv("LLM_API_KEY_PATH")
-GITHUB_PRIVATE_KEY_PATH = os.getenv("GITHUB_PRIVATE_KEY_PATH")
+LLM_API_KEY_PATH = os.getenv(
+    "LLM_API_KEY_PATH",
+    os.path.join(os.path.dirname(__file__), "resources", "claude-api-key.txt"),    
+)
+GITHUB_PRIVATE_KEY_PATH = os.getenv(
+    "GITHUB_PRIVATE_KEY_PATH", 
+    os.path.join(os.path.dirname(__file__), "resources", "github_private_key.pem")
+)
 AWS_REGION_NAME = os.getenv("AWS_REGION_NAME", "ap-southeast-2")
 
 CLIENT_ID = "Iv23liHKhbBXLoJvAoC7"

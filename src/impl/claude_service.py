@@ -21,12 +21,7 @@ class AnthropicLLMService(LLMServiceInterface):
 
     def _load_api_key(self) -> str:
         if ENV.lower() == "local":
-            with open(
-                os.path.join(
-                    os.path.dirname(__file__), "..", "resources", "claude-api-key.txt"
-                ),
-                "r",
-            ) as key_file:
+            with open(LLM_API_KEY_PATH, "r") as key_file:
                 return key_file.read().strip()
         else:
             return self.secrets_manager.get_secret(LLM_API_KEY_PATH)

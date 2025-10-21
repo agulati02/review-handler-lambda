@@ -7,17 +7,20 @@ from ..interfaces import (
     LLMServiceInterface,
 )
 from ..impl import SSMSecretsManager, GithubService, AnthropicLLMService
+from .token_manager import TokenManager
 
 
 @lru_cache(maxsize=1)
 def get_secrets_manager() -> SecretsManagerInterface:
     return SSMSecretsManager()
 
+@lru_cache(maxsize=1)
+def get_token_manager() -> TokenManager:
+    return TokenManager(secrets_manager=get_secrets_manager())
 
 @lru_cache(maxsize=1)
 def get_repo_service() -> RespositoryServiceInterface:
-    return GithubService(secrets_manager=get_secrets_manager())
-
+    return GithubService(secrets_manager=get_secrets_manager(), token_manager=get_token_manager())
 
 @lru_cache(maxsize=1)
 def get_llm_service() -> LLMServiceInterface:
