@@ -15,7 +15,7 @@ class TokenManager:
             with open(GITHUB_PRIVATE_KEY_PATH, "r") as key_file:
                 private_key = key_file.read()
         else:
-            return self.secrets_manager.get_secret(GITHUB_PRIVATE_KEY_PATH)
+            private_key = self.secrets_manager.get_secret(GITHUB_PRIVATE_KEY_PATH)
 
         payload = {
             "iat": int(datetime.now(timezone.utc).timestamp()),
