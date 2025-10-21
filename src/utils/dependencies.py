@@ -3,7 +3,7 @@ from functools import lru_cache
 from ..config import AWS_REGION_NAME
 from ..interfaces import (
     SecretsManagerInterface,
-    RespositoryServiceInterface,
+    RepositoryServiceInterface,
     LLMServiceInterface,
 )
 from ..impl import SSMSecretsManager, GithubService, AnthropicLLMService
@@ -19,7 +19,7 @@ def get_token_manager() -> TokenManager:
     return TokenManager(secrets_manager=get_secrets_manager())
 
 @lru_cache(maxsize=1)
-def get_repo_service() -> RespositoryServiceInterface:
+def get_repo_service() -> RepositoryServiceInterface:
     return GithubService(secrets_manager=get_secrets_manager(), token_manager=get_token_manager())
 
 @lru_cache(maxsize=1)

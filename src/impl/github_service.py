@@ -1,9 +1,9 @@
 from httpx import Client
-from ..interfaces import RespositoryServiceInterface, SecretsManagerInterface
+from ..interfaces import RepositoryServiceInterface, SecretsManagerInterface
 from ..utils.token_manager import TokenManager
 
 
-class GithubService(RespositoryServiceInterface):
+class GithubService(RepositoryServiceInterface):
     def __init__(
             self, 
             secrets_manager: SecretsManagerInterface,

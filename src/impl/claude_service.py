@@ -43,4 +43,4 @@ class AnthropicLLMService(LLMServiceInterface):
         )
         prompt = prompt_template.invoke({"diff": diff, "context": context or ""})
         response = self.llm.invoke(prompt)
-        return response
+        return response["parsed"]
