@@ -5,3 +5,5 @@ requests
 cryptography
 pytest
 boto3
+boto3-stubs
+langchain-anthropic

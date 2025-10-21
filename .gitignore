@@ -3,3 +3,4 @@ secrets
 .vscode
 *.pem
 *cache*
+*api-key*
