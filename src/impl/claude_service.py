@@ -20,24 +20,32 @@ class AnthropicLLMService(LLMServiceInterface):
         ).with_structured_output(LLMResponseStructure, include_raw=True)
 
     def _load_api_key(self) -> str:
-        if ENV.lower() == 'local':
-            with open(os.path.join(os.path.dirname(__file__), '..', 'resources', 'claude-api-key.txt'), 'r') as key_file:
+        if ENV.lower() == "local":
+            with open(
+                os.path.join(
+                    os.path.dirname(__file__), "..", "resources", "claude-api-key.txt"
+                ),
+                "r",
+            ) as key_file:
                 return key_file.read().strip()
         else:
             return self.secrets_manager.get_secret(LLM_API_KEY_PATH)
-    
+
     def _load_message_templates(self, trigger: UserAction) -> dict:
-        config_path = os.path.join(os.path.dirname(__file__), '..', 'resources', 'llm_config.json')
-        with open(config_path, 'r') as config_file:
+        config_path = os.path.join(
+            os.path.dirname(__file__), "..", "resources", "llm_config.json"
+        )
+        with open(config_path, "r") as config_file:
             return json.load(config_file).get(trigger.value, {})
 
-    def get_code_review(self, user_action: UserAction, diff: str, context: Union[str, None] = None) -> str:
+    def get_code_review(
+        self, user_action: UserAction, diff: str, context: Union[str, None] = None
+    ) -> str:
         messages = self._load_message_templates(user_action)
         # Convert messages to ChatPromptTemplate
-        prompt_template = ChatPromptTemplate.from_messages([
-            ("system", messages["system"]),
-            ("human", messages["human"])
-        ])
+        prompt_template = ChatPromptTemplate.from_messages(
+            [("system", messages["system"]), ("human", messages["human"])]
+        )
         prompt = prompt_template.invoke({"diff": diff, "context": context or ""})
         response = self.llm.invoke(prompt)
         return response

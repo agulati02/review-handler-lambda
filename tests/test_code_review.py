@@ -3,6 +3,7 @@ from unittest.mock import Mock
 import src.utils.dependencies as dependencies
 from src.models.enums import UserAction
 
+
 def test_get_code_review_with_mock(monkeypatch):
     fake_reviewer = Mock()
     expected_response = {"summary": "Fibonacci recursion; consider memoization"}
@@ -15,12 +16,10 @@ def test_get_code_review_with_mock(monkeypatch):
 
     reviewer = dependencies.get_llm_service()
     response = reviewer.get_code_review(
-        user_action=UserAction.REVIEW_REQUESTED,
-        diff=diff_example
+        user_action=UserAction.REVIEW_REQUESTED, diff=diff_example
     )
 
     assert response == expected_response
     fake_reviewer.get_code_review.assert_called_once_with(
-        user_action=UserAction.REVIEW_REQUESTED,
-        diff=diff_example
+        user_action=UserAction.REVIEW_REQUESTED, diff=diff_example
     )
