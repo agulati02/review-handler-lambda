@@ -46,7 +46,7 @@ class GithubService(RepositoryServiceInterface):
         comments_url = f"{pull_request_url}/comments"
         headers = {
             "Authorization": f"token {access_token}",
-            "Accept": "application/vnd.github.v3+json",
+            "Accept": "application/vnd.github+json",
         }
         comments = ""
         for review in reviews.items:
