@@ -34,7 +34,7 @@ class AnthropicLLMService(LLMServiceInterface):
             return json.load(config_file).get(trigger.value, {})
 
     def get_code_review(
-        self, user_action: UserAction, diff: str, context: Union[str, None] = None
+        self, user_action: UserAction, diff: str, context: Union[str, None] = None, parsed: bool = True
     ) -> str:
         messages = self._load_message_templates(user_action)
         # Convert messages to ChatPromptTemplate
@@ -43,4 +43,4 @@ class AnthropicLLMService(LLMServiceInterface):
         )
         prompt = prompt_template.invoke({"diff": diff, "context": context or ""})
         response = self.llm.invoke(prompt)
-        return response["parsed"]
+        return response["raw"]

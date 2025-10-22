@@ -37,7 +37,7 @@ class GithubService(RepositoryServiceInterface):
         response.raise_for_status()
         return response.text
 
-    def post_review_comments(self, pull_request_url: str, installation_id: str, reviews: LLMResponseStructure) -> None:
+    def post_review_comments(self, pull_request_url: str, installation_id: str, reviews: str) -> None:
         """Posts review comments to a given pull request on GitHub."""
         jwt_token = self.token_manager.get_jwt_token()
         access_token = self.token_manager.get_installation_access_token(
@@ -48,13 +48,13 @@ class GithubService(RepositoryServiceInterface):
             "Authorization": f"token {access_token}",
             "Accept": "application/vnd.github+json",
         }
-        comments = ""
-        for review in reviews.items:
-            comments += f"Suggested Change (Lines {review.line_number_start} to {review.line_number_end}):\n"
-            comments += f"```diff\n{review.suggestion_diff}\n```\n\n"
+        # comments = ""
+        # for review in reviews.items:
+        #     comments += f"Suggested Change (Lines {review.line_number_start} to {review.line_number_end}):\n"
+        #     comments += f"```diff\n{review.suggestion_diff}\n```\n\n"
         
         payload = {
-            "body": comments,
+            "body": reviews,
             "event": "COMMENT"
         }
         response = self.client.post(comments_url, headers=headers, json=payload)

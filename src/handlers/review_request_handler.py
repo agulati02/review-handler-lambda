@@ -8,7 +8,6 @@ def handle_review_request(message_payload: dict, llm_service: LLMServiceInterfac
         installation_id=message_payload["installation"]["id"]
     )
     review_comments = llm_service.get_code_review(diff=diff, user_action=UserAction.REVIEW_REQUESTED)
-    print(review_comments)
     repo_service.post_review_comments(
         pull_request_url=message_payload["pull_request"]["issue_url"],
         installation_id=message_payload["installation"]["id"],
