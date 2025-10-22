@@ -17,7 +17,7 @@ class AnthropicLLMService(LLMServiceInterface):
             model=LLM_MODEL_NAME,
             api_key=self._load_api_key(),
             max_tokens=LLM_MAX_RESPONSE_TOKENS,
-        ).with_structured_output(LLMResponseStructure, include_raw=True)
+        )
 
     def _load_api_key(self) -> str:
         if ENV.lower() == "local":
@@ -43,4 +43,4 @@ class AnthropicLLMService(LLMServiceInterface):
         )
         prompt = prompt_template.invoke({"diff": diff, "context": context or ""})
         response = self.llm.invoke(prompt)
-        return response["raw"]
+        return response.content
