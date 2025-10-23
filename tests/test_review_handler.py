@@ -1,10 +1,12 @@
 import json
-import pytest
+from typing import Any
+
+from commons.models.enums import UserAction  # type: ignore
+
 from src.lambda_function import lambda_handler
-from src.models.enums import UserAction
 
 
-def get_mock_event() -> dict:
+def get_mock_event() -> dict[str, Any]:
     return {
         "Records": [
             {
@@ -18,19 +20,20 @@ def get_mock_event() -> dict:
                         },
                         "installation": {
                             "id": 87178034,
-                            "node_id": "MDIzOkludGVncmF0aW9uSW5zdGFsbGF0aW9uODcxNzgwMzQ="
+                            "node_id": "MDIzOkludGVncmF0aW9uSW5zdGFsbGF0aW9uODcxNzgwMzQ=",
                         },
-                        "trigger": UserAction.REVIEW_REQUESTED
+                        "trigger": UserAction.REVIEW_REQUESTED,
                     },
                 )
             }
         ]
     }
 
+
 def test_lambda_handler_review_request():
     mock_event = get_mock_event()
     response = lambda_handler(mock_event, None)
-    
+
     assert response["statusCode"] == 200
     body = response["body"]
     assert "review_comments" in body
