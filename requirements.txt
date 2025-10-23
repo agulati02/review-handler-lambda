@@ -7,3 +7,4 @@ pytest
 boto3
 boto3-stubs
 langchain-anthropic
+tgrafy-commons==0.1.1

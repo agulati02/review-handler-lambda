@@ -1,10 +1,12 @@
-import pytest
+from typing import Any
 from unittest.mock import Mock
+
+from commons.models.enums import UserAction  # type: ignore
+
 import src.utils.dependencies as dependencies
-from src.models.enums import UserAction
 
 
-def test_get_code_review_with_mock(monkeypatch):
+def test_get_code_review_with_mock(monkeypatch: Any):
     fake_reviewer = Mock()
     expected_response = {"summary": "Fibonacci recursion; consider memoization"}
     fake_reviewer.get_code_review.return_value = expected_response
