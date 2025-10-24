@@ -255,7 +255,7 @@ jobs:
 
       - name: Remove old layer versions
         run: |
-          echo "🧹 Cleaning up old layer versions (keeping last 3)..."
+          echo "> Cleaning up old layer versions (keeping last 3)..."
           
           VERSIONS=$(aws lambda list-layer-versions \
             --layer-name ${{ env.LAYER_NAME }} \
