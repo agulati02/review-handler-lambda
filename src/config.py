@@ -7,14 +7,11 @@ load_dotenv(
     dotenv_path=os.path.join(os.path.dirname(__file__), "resources", f".env.{ENV}")
 )
 
-LLM_API_KEY_PATH = os.getenv(
-    "LLM_API_KEY_PATH",
-    os.path.join(os.path.dirname(__file__), "resources", "claude-api-key.txt"),
-)
-GITHUB_PRIVATE_KEY_PATH = os.getenv(
-    "GITHUB_PRIVATE_KEY_PATH",
-    os.path.join(os.path.dirname(__file__), "resources", "github_private_key.pem"),
-)
+SECRET_LLM_API_KEY_PATH = os.getenv("SECRET_LLM_API_KEY_PATH")
+SECRET_GITHUB_PRIVATE_KEY_PATH = os.getenv("SECRET_GITHUB_PRIVATE_KEY_PATH")
+SECRET_DATABASE_USERNAME_PATH = os.getenv("SECRET_DATABASE_USERNAME_PATH")
+SECRET_DATABASE_PASSWORD_PATH = os.getenv("SECRET_DATABASE_PASSWORD_PATH")
+
 AWS_REGION_NAME = os.getenv("AWS_REGION_NAME", "ap-southeast-2")
 
 CLIENT_ID = "Iv23liHKhbBXLoJvAoC7"
@@ -22,3 +19,7 @@ JWT_ALGORITHM = "RS256"
 
 LLM_MODEL_NAME = os.getenv("LLM_MODEL_NAME")
 LLM_MAX_RESPONSE_TOKENS = int(os.getenv("LLM_MAX_RESPONSE_TOKENS", "2048"))
+
+DATABASE_CONNECTION_STRING = os.getenv("DATABASE_CONNECTION_STRING")
+DATABASE_NAME = os.getenv("DATABASE_NAME")
+EVENTS_COLLECTION = os.getenv("EVENTS_COLLECTION")
