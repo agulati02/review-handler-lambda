@@ -2,9 +2,9 @@ from typing import Any
 
 import orjson
 from commons.models.enums import UserAction  # type: ignore
-from commons.utils.dependencies import get_repository_service  # type: ignore
+from commons.utils.dependencies import get_repository_service, get_database_service, get_secrets_manager  # type: ignore
 
-from .config import AWS_REGION_NAME, GITHUB_PRIVATE_KEY_PATH
+from .config import AWS_REGION_NAME, SECRET_GITHUB_PRIVATE_KEY_PATH, SECRET_DATABASE_USERNAME_PATH, SECRET_DATABASE_PASSWORD_PATH, DATABASE_CONNECTION_STRING, DATABASE_NAME
 from .handlers import handle_discussion_comment, handle_review_request
 from .utils.dependencies import get_llm_service
 
@@ -24,9 +24,18 @@ class ProcessRouter:
         llm_service = get_llm_service()
         repo_service = get_repository_service(
             aws_region_name=AWS_REGION_NAME,
-            repo_private_key_path=GITHUB_PRIVATE_KEY_PATH,
+            repo_private_key_path=SECRET_GITHUB_PRIVATE_KEY_PATH,
         )
-        return handler(message_payload, llm_service, repo_service)
+        db_username, db_password = tuple(get_secrets_manager(AWS_REGION_NAME).get_secrets(
+            secrets=[SECRET_DATABASE_USERNAME_PATH, SECRET_DATABASE_PASSWORD_PATH]  # type: ignore
+        ))  # type: ignore
+        database_service = get_database_service(
+            conn_string=DATABASE_CONNECTION_STRING,
+            database_name=DATABASE_NAME,
+            username=db_username,
+            password=db_password
+        )
+        return handler(message_payload, llm_service, repo_service, database_service)
 
 
 def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:

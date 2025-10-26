@@ -7,7 +7,7 @@ from commons.models.enums import UserAction  # type: ignore
 from langchain_anthropic.chat_models import ChatAnthropic
 from langchain_core.prompts import ChatPromptTemplate
 
-from ..config import ENV, LLM_API_KEY_PATH, LLM_MAX_RESPONSE_TOKENS, LLM_MODEL_NAME
+from ..config import ENV, SECRET_LLM_API_KEY_PATH, LLM_MAX_RESPONSE_TOKENS, LLM_MODEL_NAME
 from ..interfaces import LLMServiceInterface
 
 
@@ -21,11 +21,13 @@ class AnthropicLLMService(LLMServiceInterface):
         )
 
     def _load_api_key(self) -> Union[str, None]:
+        if not SECRET_LLM_API_KEY_PATH:
+            raise ValueError("SECRET_LLM_API_KEY_PATH not set")
         if ENV.lower() == "local":
-            with open(LLM_API_KEY_PATH, "r") as key_file:
+            with open(SECRET_LLM_API_KEY_PATH, "r") as key_file:
                 return key_file.read().strip()
         else:
-            return self.secrets_manager.get_secret(LLM_API_KEY_PATH)
+            return self.secrets_manager.get_secret(SECRET_LLM_API_KEY_PATH)
 
     def _load_message_templates(self, trigger: UserAction) -> dict[str, Any]:
         config_path = os.path.join(
