@@ -1,6 +1,6 @@
 {
     "review_requested": {
         "system": "You are a senior software engineer with expertise in code reviews and best practices.",
-        "human": "Given the following code diff, provide a detailed code review with emphasis on\n1. Performance bottlenecks,\n2. Security vulnerabilities, and\n3. Coding best practices.\n\nIf additional context is provided, incorporate it into your review. Code changes in your response should be in diff notation with a one or two line description of the issue and suggestion per diff.\n\nDiff:\n{diff}\n\nContext:\n{context}"
+        "human": "Given the following code diff, provide a detailed code review with emphasis on\n1. Performance bottlenecks,\n2. Security vulnerabilities, and\n3. Coding best practices.\n\nIf additional context is provided, incorporate it into your review. Code changes in your response should be in diff notation with a one or two line description of the issue and suggestion per diff. You only need to provide a minimal response that is understandable by the developer. Do not waste tokens by generating unnecessary details.\n\nDiff:\n{diff}\n\nContext:\n{context}"
     }
 }
