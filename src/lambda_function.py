@@ -1,5 +1,5 @@
 from typing import Any
-
+import logging
 import orjson
 from commons.models.enums import UserAction  # type: ignore
 from commons.utils.dependencies import get_repository_service, get_database_service, get_secrets_manager  # type: ignore
@@ -43,4 +43,5 @@ def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
         router = ProcessRouter()
         return router.route_event(event)
     except Exception as e:
+        logging.error(f"Unhandled exception: {str(e)}")
         return {"statusCode": 500, "body": orjson.dumps(f"Error: {str(e)}")}

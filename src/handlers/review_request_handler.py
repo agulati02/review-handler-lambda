@@ -2,7 +2,7 @@ from typing import Any
 from datetime import datetime, timezone
 
 from commons.interfaces import RepositoryServiceInterface, DatabaseServiceInterface  # type: ignore
-from commons.models.enums import UserAction,   # type: ignore
+from commons.models.enums import UserAction   # type: ignore
 
 from ..config import CLIENT_ID, EVENTS_COLLECTION
 from ..interfaces import LLMServiceInterface
