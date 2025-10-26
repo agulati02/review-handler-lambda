@@ -20,7 +20,7 @@ def handle_review_request(
     database_service.update(
         collection=EVENTS_COLLECTION,
         filter={
-            "installation_id": message_payload['trigger_id'],
+            "trigger_id": message_payload['trigger_id'],
         },
         diff={
             "status": EventStatus.IN_REVIEW,
@@ -44,7 +44,7 @@ def handle_review_request(
     database_service.update(
         collection=EVENTS_COLLECTION,
         filter={
-            "installation_id": message_payload['trigger_id'],
+            "trigger_id": message_payload['trigger_id'],
         },
         diff={
             "status": EventStatus.COMPLETED,
