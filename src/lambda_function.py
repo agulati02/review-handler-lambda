@@ -1,6 +1,7 @@
-from typing import Any
 import logging
 import orjson
+from typing import Any
+from aws_lambda_powertools.utilities.typing import LambdaContext
 from commons.models.enums import UserAction  # type: ignore
 from commons.utils.dependencies import get_repository_service, get_database_service, get_secrets_manager  # type: ignore
 
@@ -38,7 +39,7 @@ class ProcessRouter:
         return handler(message_payload, llm_service, repo_service, database_service)
 
 
-def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
+def lambda_handler(event: dict[str, Any], context: LambdaContext) -> dict[str, Any]:
     try:
         router = ProcessRouter()
         return router.route_event(event)
