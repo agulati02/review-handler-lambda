@@ -44,7 +44,7 @@ def handle_discussion_comment(
     repo_service.post_issue_comment(
         comments_url=message_payload["issue"]["comments_url"],
         installation_id=message_payload["installation"]["id"],
-        content=f"@{message_payload["issue"]["user"]["login"]} - {response}",
+        content=response,
         app_client_id=CLIENT_ID,
     )
     database_service.update(
