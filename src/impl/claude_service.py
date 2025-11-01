@@ -1,5 +1,3 @@
-import json
-import os
 from typing import Any, Union
 
 from commons.interfaces import SecretsManagerInterface  # type: ignore
@@ -29,13 +27,6 @@ class AnthropicLLMService(LLMServiceInterface):
         else:
             return self.secrets_manager.get_secret(SECRET_LLM_API_KEY_PATH)
 
-    def _load_message_templates(self, trigger: UserAction) -> dict[str, Any]:
-        config_path = os.path.join(
-            os.path.dirname(__file__), "..", "resources", "llm_config.json"
-        )
-        with open(config_path, "r") as config_file:
-            return json.load(config_file).get(trigger.value, {})
-
     def get_code_review(
         self,
         user_action: UserAction,
@@ -48,5 +39,19 @@ class AnthropicLLMService(LLMServiceInterface):
             [("system", messages["system"]), ("human", messages["human"])]
         )
         prompt = prompt_template.invoke({"diff": diff, "context": context or ""})  # type: ignore
+        response = self.llm.invoke(prompt)
+        return response.content  # type: ignore
+    
+    def get_comment_response(self, user_action: UserAction, diff: str, comment_body: str, previous_comments: list[dict[str, Any]]) -> str:
+        # Convert previous comments to string body
+        previous_comments_str = "".join([
+            f"User: {comment["user"]}\nComment: {"comment"}"
+            for comment in previous_comments
+        ])
+        messages = self._load_message_templates(user_action)
+        prompt_template = ChatPromptTemplate.from_messages( # type: ignore
+            [("system", messages["system"]), ("human", messages["human"])]
+        )
+        prompt = prompt_template.invoke({"comment_body": comment_body, "diff": diff, "previous_comments": previous_comments_str})   # type: ignore
         response = self.llm.invoke(prompt)
         return response.content  # type: ignore

@@ -7,4 +7,5 @@ pytest
 boto3
 boto3-stubs
 langchain-anthropic
-tgrafy-commons==0.2.10
+aws-lambda-powertools
+tgrafy-commons==0.3.0
